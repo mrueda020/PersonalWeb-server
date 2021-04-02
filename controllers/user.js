@@ -71,7 +71,31 @@ const signIn = (req, res) => {
   });
 };
 
+const getUsers = (req, res) => {
+  console.log(req);
+  User.find().then((users) => {
+    if (!users) {
+      res.status(404).send({ message: "No hay usuarios" });
+    } else {
+      res.status(200).send({ users });
+    }
+  });
+};
+
+const getActiveUsers = (req, res) => {
+  const query = req.query;
+  User.find({ active: query.active }).then((users) => {
+    if (!users) {
+      res.status(404).send({ message: "No hay usuarios" });
+    } else {
+      res.status(200).send({ users });
+    }
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
+  getUsers,
+  getActiveUsers,
 };

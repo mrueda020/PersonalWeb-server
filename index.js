@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 8080;
 
 const { API_VERSION } = require("./config");
 const CONNECTION_URL =
-  "mongodb+srv://mrueda020:personalweb@webpersonal.q9h4g.mongodb.net/WebPersonal?retryWrites=true&w=majority";
+  "mongodb+srv://mrueda020:0XtEFZwOc22hIxNa@mycluster.q9h4g.mongodb.net/PersonalWeb?retryWrites=true&w=majority";
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
