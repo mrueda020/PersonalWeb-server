@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt-nodejs");
 const User = require("../models/user");
 const jwt = require("../services/jwt");
-
+const fs = require("fs");
+const path = require("path");
 const signUp = (req, res) => {
   const user = new User();
   const { name, lastname, email, password, repeatPassword } = req.body;
@@ -93,9 +94,43 @@ const getActiveUsers = (req, res) => {
   });
 };
 
+const uploadAvatar = async (req, res) => {
+  const params = req.params;
+
+  try {
+    const user = await User.findById({ _id: params.id });
+    if (req.files) {
+      let filePath = String(req.files.avatar.path);
+      let fileSplit = filePath.split("\\");
+      let fileName = fileSplit[2];
+      let extension = fileName.split(".");
+      let fileExtension = extension[1];
+      if (fileExtension !== "png" && fileExtension !== "jpg") {
+        console.log(fileExtension);
+        res.status(500).send({
+          message: "Img no valida solo se permite archivos jpg y png",
+        });
+      }
+      user.avatar = fileName;
+      User.findByIdAndUpdate({ _id: params.id }, user, (err, result) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        if (!result) {
+          res.status(404).send({ message: "Usuario no encontrado" });
+        }
+        res.status(200).send({ message: result });
+      });
+    }
+  } catch (err) {
+    res.status(500).send({ message: "Error" });
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
   getUsers,
   getActiveUsers,
+  uploadAvatar,
 };
