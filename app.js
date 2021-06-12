@@ -1,14 +1,12 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-
 const app = express();
-const { API_VERSION } = require("./config");
+const { API_VERSION } = require("./config/config");
 
 const userRoutes = require("./routers/user");
 const authRoutes = require("./routers/auth");
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt-nodejs");
 const User = require("../models/user");
 const jwt = require("../services/jwt");
+
 const fs = require("fs");
 const path = require("path");
+
 const signUp = (req, res) => {
   const user = new User();
   const { name, lastname, email, password, repeatPassword } = req.body;
@@ -127,10 +129,24 @@ const uploadAvatar = async (req, res) => {
   }
 };
 
+const getAvatar = (req, res) => {
+  console.log(req.params);
+  const avatarName = req.params.avatarName;
+  const filePath = "./uploads/avatar/" + avatarName;
+
+  fs.stat(filePath, (error, stats) => {
+    if (error) {
+      res.status(500).send({ message: "No existe el avatar" });
+    }
+    res.sendFile(path.resolve(filePath));
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
   getUsers,
   getActiveUsers,
   uploadAvatar,
+  getAvatar,
 };
