@@ -22,4 +22,9 @@ api.put(
 );
 api.get("/get-avatar/:avatarName", userController.getAvatar);
 api.put("/update-user/:id", [md_auth.ensureAuth], userController.updateUser);
+api.put(
+  "/activate-user/:id",
+  [md_auth.ensureAuth],
+  userController.activateUser
+);
 module.exports = api;
