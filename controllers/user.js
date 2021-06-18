@@ -142,9 +142,19 @@ const getAvatar = (req, res) => {
   });
 };
 
-const updateUser = (req, res) => {
-  const userData = req.body;
+const updateUser = async (req, res) => {
+  let userData = req.body;
   const pararms = req.params;
+
+  if (userData.password) {
+    await bcrypt.hash(userData.password, null, null, (err, hash) => {
+      if (err) {
+        res.status(500).send({ message: "Error en el servidor" });
+      } else {
+        userData.password = hash;
+      }
+    });
+  }
   User.findByIdAndUpdate({ _id: pararms.id }, userData, (err, userUpdate) => {
     if (err) {
       res.status(500).send({ message: "Error en el servidor" });
